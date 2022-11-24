@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bullseye64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "256"
+  end
+
+  config.vm.define "srv" do |srv|
+    srv.vm.network "private_network", ip: "192.168.56.10"
+    srv.vm.network "private_network", ip: "192.168.57.10",
+      virtualbox__intnet: true
+
+    srv.vm.provision "shell", inline: <<-SHELL
+      apt update && apt upgrade -y
+      apt install -y isc-dhcp-server 
+      cp -v /vagrant/isc-dhcp-server /etc/default/
+      cp -v /vagrant/dhcpd.conf /etc/dhcp/
+      systemctl restart isc-dhcp-server
+      systemctl status isc-dhcp-server
+      SHELL
+    end
+
+  config.vm.define "c1" do |c1|
+    c1.vm.network "private_network",
+     virtualbox__intnet: true,
+     auto_config: false,
+     :mac => "0800276f6786"
+
+    c1.vm.provision "shell", inline: <<-SHELL
+     dhclient eth1
+    SHELL
+  end
+end

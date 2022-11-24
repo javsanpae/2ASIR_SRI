@@ -1,0 +1,45 @@
+# coding: utf-8
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "debian/bullseye64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.linked_clone = true
+  end
+
+  # Provisión común a todas las máquinas
+  
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update --fix-missing -y
+  SHELL
+
+
+  ####################################################################
+  # ftp.sistema.sol
+  ####################################################################
+  
+  config.vm.define "ftp" do |ftp|
+
+    ftp.vm.provider "virtualbox" do |vb|
+      vb.name = "ftp-lab-1"
+      vb.memory = "256"
+    end
+
+    # Red privada con interfaz solo-anfitrión
+    
+    ftp.vm.hostname = "ftp.sistema.sol"    
+    ftp.vm.network "public_network"
+
+    # Bridging the FTP documents into a host folder
+    ftp.vm.synced_folder "./data/", "/srv/ftp/"
+    
+    # Provisionar de fichero
+    
+    ftp.vm.provision "shell", path: "bootstrap.sh"
+    
+  end # ftp
+
+end
