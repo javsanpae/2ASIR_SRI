@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bullseye64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.linked_clone = true
+  end
+
+
+  config.vm.define "primary" do |primary|
+    primary.vm.network "private_network", ip: "192.168.56.100",
+      virtualbox__intnet: true
+
+    primary.vm.hostname = "tierra.sistema.sol"
+
+    primary.vm.provision "shell", inline: <<-SHELL
+      apt-get update && apt-get upgrade -y
+      apt-get install -y bind9 bind9utils bind9-dnsutils
+      cp -v /vagrant/primary/* /etc/bind/
+      systemctl restart bind9 && systemctl status bind9
+    SHELL
+  end
+
+  config.vm.define "secondary" do |secondary|
+    secondary.vm.network "private_network", ip: "192.168.56.102",
+      virtualbox__intnet: true
+
+    secondary.vm.hostname = "venus.sistema.sol"
+    secondary.vm.provision "shell", inline: <<-SHELL
+      apt-get update && apt-get upgrade -y
+      apt-get install -y bind9 bind9utils bind9-dnsutils
+      cp -v /vagrant/secondary/* /etc/bind/
+      dig @192.168.56.100 sistema.sol axfr
+      systemctl restart bind9
+    SHELL
+
+  end
+
+end
