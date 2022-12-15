@@ -1,0 +1,18 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	maestro.gorro.ns. root.gorro.ns. (
+			      1		; Serial
+			 604800		; Refresh
+			   3600		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	maestro.gorro.ns.
+@	IN	NS	esclavo.gorro.ns.
+@	IN	NS	localhost.
+
+2	IN	PTR	maestro.gorro.ns.
+3	IN	PTR	esclavo.gorro.ns.
+4	IN	PTR	somos.gorro.ns.

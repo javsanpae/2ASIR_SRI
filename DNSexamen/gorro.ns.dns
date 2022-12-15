@@ -1,0 +1,26 @@
+;
+; sistema.sol
+;
+$TTL	86400
+@	IN	SOA	maestro.gorro.ns. root.gorro.ns. (
+			      1		; Serial
+			 604800		; Refresh
+			   3600		; Retry
+			2419200		; Expire
+			  86400 )	; Negative Cache TTL
+;
+@				IN		NS		maestro.gorro.ns.
+@				IN		NS		localhost.
+@				IN		NS		esclavo.gorro.ns.
+@				IN		MX 10	maestro.gorro.ns.
+
+
+maestro			IN		A		192.168.57.2
+esclavo         IN      A       192.168.57.3
+somos           IN      A       192.168.57.4
+
+
+
+www				IN		CNAME	somos
+dns             IN		CNAME   maestro
+correo          IN      CNAME	maestro

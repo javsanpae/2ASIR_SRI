@@ -1,0 +1,57 @@
+# coding: utf-8
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  ######################################################################
+  #
+  # Opciones GLOBALES
+  #
+  ######################################################################
+  
+  config.vm.box = "debian/bullseye64"
+  config.ssh.insert_key = false
+  
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "256"
+    vb.linked_clone = true
+  end # virtualbox
+
+  # Actualizar SO
+  config.vm.provision "update", type:"shell", inline: <<-SHELL
+    apt-get update 
+  SHELL
+
+  ######################################################################
+  #
+  # Servidor DNS maestro
+  #
+  ######################################################################
+  
+  config.vm.define "master" do |master|
+    master.vm.hostname = "maestro.gorro.ns"
+    
+    # Tarjeta en red interna
+    master.vm.network :private_network, ip: "192.168.57.2"
+    
+    # Instalar bind9
+    master.vm.provision "bind9-install", type:"shell", inline: <<-SHELL
+        apt-get install -y bind9 bind9-utils bind9-doc
+    SHELL
+
+    # Copiar ficheros configuración 
+    
+    master.vm.provision "config", type:"shell", inline: <<-SHELL
+      cp -v /vagrant/resolv.conf /etc/
+      cp -v /vagrant/named.conf.options /etc/bind/
+      cp -v /vagrant/named.conf.local /etc/bind
+      cp -v /vagrant/gorro.ns.dns /var/lib/bind
+      cp -v /vagrant/192.168.57.dns /var/lib/bind
+      systemctl restart bind9
+      systemctl status bind9
+    SHELL
+
+  end # DNS maestro
+  
+end # Configure
