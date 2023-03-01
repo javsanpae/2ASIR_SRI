@@ -1,5 +1,0 @@
-# añadir usuarios a htpasswd
-d run --rm --entrypoint htpasswd httpd -bn user pass >> htdocs/.htpasswd
-
-# ejecutar el contenedor con todo lo q llevamos
-docker run -dti --name=dockerLab2 -p 8080:80 -v `pwd`/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf -v `pwd`/htdocs:/usr/local/apache2/htdocs -v `pwd`/auth:/usr/local/apache2/auth httpd

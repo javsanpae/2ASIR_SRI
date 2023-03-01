@@ -1,0 +1,7 @@
+version: '2'
+services:
+  bot:
+    build: .
+    env_file:
+      - ./token.txt
+    container_name: jsanchez_bot

@@ -1,0 +1,1 @@
+javsanpae/sri-php-https:1.0

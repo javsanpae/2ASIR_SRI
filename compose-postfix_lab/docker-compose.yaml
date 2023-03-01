@@ -1,0 +1,43 @@
+version: '2'
+networks:
+  maildns:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.10.0/24
+          gateway: 10.0.10.1
+services:
+  mailserver:
+    image: marooou/postfix-roundcube:latest
+    ports:
+      - 25:25
+      - 80:80
+      - 110:110
+      - 143:143
+      - 465:465
+      - 993:993
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data/vmail:/var/vmail
+    environment:
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWD=1234
+      - DOMAIN_NAME=jsp.local
+      - USERS=luis:1234,ana:1234
+    networks:
+      maildns:
+        ipv4_address: 10.0.10.3
+    dns:
+      - 10.0.10.2:953
+    depends_on: 
+      - dns
+    container_name: mailserver
+  dns:
+    build: ./dns
+    ports:
+      - 953:53
+    dns: 127.0.0.1
+    networks:
+      maildns:
+        ipv4_address: 10.0.10.2

@@ -1,0 +1,14 @@
+;
+;
+;
+$TTL	86400
+@	IN	SOA	dns.izv.ies. root.izv.ies. (
+			      1		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			  86400 )	; Negative Cache TTL
+;
+@   IN  NS  dns.jsp.local.
+2	IN	PTR	dns.jsp.local.
+3   IN  PTR mail.jsp.local.

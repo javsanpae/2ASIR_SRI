@@ -1,0 +1,40 @@
+version: '2.14.1'
+services:
+  dns:
+    image: internetsystemsconsortium/bind9:9.18
+    ports:
+      - 5353:53
+    volumes:
+      - ./dns-conf/named.conf.local:/etc/bind/named.conf.local
+      - ./dns-conf/named.conf.options:/etc/bind/named.conf.options
+      - ./dns-conf/10.0.10.dns:/var/lib/bind/10.0.10.dns
+      - ./dns-conf/sistema.sol.dns:/var/lib/bind/sistema.sol.dns
+    dns:
+      - 10.0.10.2
+    networks:
+      network:
+        ipv4_address: 10.0.10.2
+  web:
+    build: .
+    ports:
+      - 443:443
+    networks:
+      network:
+        ipv4_address: 10.0.10.3
+    dns:
+      - 10.0.10.2
+    depends_on:
+      - dns
+    volumes:
+      - ./htdocs/:/usr/local/apache2/htdocs/
+
+volumes:
+  htdocs:
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.10.0/24
+          gateway: 10.0.10.1

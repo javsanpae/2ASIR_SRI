@@ -1,0 +1,10 @@
+version: '2.14.1'
+services:
+  web:
+    image: httpd:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - redis
+  redis:
+    image: redis:latest
