@@ -2,7 +2,7 @@
 ;
 ;
 $TTL	86400
-@	IN	SOA	dns.izv.ies. root.izv.ies. (
+@	IN	SOA	dns.jsp.local. root.jsp.local. (
 			      1		; Serial
 			 604800		; Refresh
 			  86400		; Retry
@@ -10,5 +10,5 @@ $TTL	86400
 			  86400 )	; Negative Cache TTL
 ;
 @   IN  NS  dns.jsp.local.
-2	IN	PTR	dns.jsp.local.
-3   IN  PTR mail.jsp.local.
+101	IN	PTR	dns.jsp.local.
+1   IN  PTR mail.jsp.local.

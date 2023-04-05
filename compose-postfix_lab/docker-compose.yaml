@@ -1,12 +1,4 @@
 version: '2'
-networks:
-  maildns:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.0.10.0/24
-          gateway: 10.0.10.1
 services:
   mailserver:
     image: marooou/postfix-roundcube:latest
@@ -24,20 +16,6 @@ services:
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWD=1234
       - DOMAIN_NAME=jsp.local
-      - USERS=luis:1234,ana:1234
-    networks:
-      maildns:
-        ipv4_address: 10.0.10.3
-    dns:
-      - 10.0.10.2:953
-    depends_on: 
-      - dns
-    container_name: mailserver
-  dns:
-    build: ./dns
-    ports:
-      - 953:53
-    dns: 127.0.0.1
-    networks:
-      maildns:
-        ipv4_address: 10.0.10.2
+      - USERS=luis:ASIR2023,mati:ASIR2023,javsanpae:ASIR2023
+    dns: 192.168.56.101
+    container_name: mail-server

@@ -11,7 +11,7 @@ zone "jsp.local" {
     file "/var/lib/bind/jsp.local.dns";
 };
 
-zone "10.0.10.in-addr.arpa" {
+zone "56.168.192.in-addr.arpa" {
     type master;
-    file "/var/lib/bind/10.0.10.dns";
+    file "/var/lib/bind/192.168.56.dns";
 };

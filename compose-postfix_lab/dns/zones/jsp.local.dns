@@ -4,8 +4,8 @@
 ; Instead, copy it, edit named.conf, and use that copy.
 ;
 $TTL	86400
-@	IN	SOA	dns.izv.ies. root.izv.ies. (
-			      1		; Serial
+@	IN	SOA	dns.jsp.local. root.jsp.local. (
+			      2		; Serial
 			 604800		; Refresh
 			  86400		; Retry
 			2419200		; Expire
@@ -13,8 +13,8 @@ $TTL	86400
 ;
 @	IN	NS	dns
 @	IN	MX 10 mail.jsp.local.
-dns	IN	A	10.0.10.2
-mail	IN	A	10.0.10.3
+dns	IN	A	192.168.56.101
+mail	IN	A	192.168.56.1
 smtp	IN	CNAME	mail
 imap	IN	CNAME	mail
 pop	IN	CNAME	mail
